@@ -1219,7 +1219,7 @@ public class MusicServiceImpl implements MusicService {
 //                    log.info("获取音乐链接结果：{}, response: {}", jsonObject.get("message"), jsonObject);
                     if (jsonObject.get("code").equals(200)) {
                         JSONObject data = jsonObject.getJSONArray("data").getJSONObject(0);
-                        result = data.getString("url");
+                        result = data.getString("url").replace("http://", "https://");
                         return result;
                     }
                 }

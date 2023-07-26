@@ -1,5 +1,12 @@
 server:
   port: 8888
+  ## Uncomment those and put keystore files
+  ## to the path where jusic-serve.jar is placed
+  ## to enable HTTPS
+  # ssl:
+  #   key-store-type: PKCS12
+  #   key-store: keystore.p12
+  #   key-store-password: xxxx
 management:
   endpoint:
     shutdown:
