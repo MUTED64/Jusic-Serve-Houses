@@ -8,6 +8,7 @@ package com.scoder.jusic.job;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.scoder.jusic.configuration.JusicProperties;
+import com.scoder.jusic.repository.MusicDefaultRepository;
 import com.scoder.jusic.util.FileOperater;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -17,6 +18,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -27,6 +29,8 @@ public class MusicTopJob {
     private JusicProperties jusicProperties;
     @Autowired
     private  ResourceLoader resourceLoader;
+    @Autowired
+    private MusicDefaultRepository musicDefaultRepository;
 
 //    public static void main(String[] args) {
 //        getData(topUrl);
@@ -36,6 +40,9 @@ public class MusicTopJob {
     @Scheduled(cron = "0 33 0 * * ? ")//fixedRate = 10800000)//表示每隔3小时
     public void getMusicTopJob(){
         JusicProperties.setDefaultListByJob(getData());
+        musicDefaultRepository.destroy("");
+        musicDefaultRepository.initialize("");
+
     }
 
     public ArrayList<String> getMusicTop(){
@@ -191,7 +198,7 @@ public class MusicTopJob {
         }
         if(allMusicIdsStr != ""){
             try {
-                FileOperater.writefileinfo(allMusicIdsStr, resourceLoader.getResource(jusicProperties.getDefaultMusicFile()));
+                FileOperater.writefileinfo(allMusicIdsStr, resourceLoader.getResource("file:"+System.getProperty("user.dir")+ File.separator+"default.txt"));
             } catch (IOException e) {
                 log.error("写入热门歌曲id失败，IOException:[{}]",e.getMessage());
             }

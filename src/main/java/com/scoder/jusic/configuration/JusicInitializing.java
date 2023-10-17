@@ -2,16 +2,14 @@ package com.scoder.jusic.configuration;
 
 import com.scoder.jusic.job.MusicTopJob;
 import com.scoder.jusic.model.House;
+import com.scoder.jusic.service.MusicService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,6 +26,9 @@ public class JusicInitializing implements InitializingBean {
 
     @Autowired
     private MusicTopJob musicTopJob;
+
+    @Autowired
+    private MusicService musicService;
 
 
     public JusicInitializing(JusicProperties jusicProperties, ResourceLoader resourceLoader,HouseContainer houseContainer) {
@@ -50,13 +51,16 @@ public class JusicInitializing implements InitializingBean {
         try{
             ArrayList<String> musicList = musicTopJob.getMusicTop();
             if(musicList == null || musicList.size() == 0){
-                InputStream inputStream = resourceLoader.getResource(jusicProperties.getDefaultMusicFile()).getInputStream();
+                InputStream inputStream = resourceLoader.getResource("file:"+System.getProperty("user.dir")+File.separator+"default.txt").getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String musicId = "";
                 // 逐行读取
                 while ((musicId = bufferedReader.readLine()) != null) {
                     musicList.add(musicId);
                 }
+            }
+            if(musicList == null || musicList.isEmpty()){
+                musicList = new ArrayList<>();
                 musicList.add("512359558");
                 musicList.add("316686");
                 musicList.add("25718007");
@@ -75,6 +79,7 @@ public class JusicInitializing implements InitializingBean {
         log.info("初始化工作开始");
         this.initDefaultMusicId();
         houseContainer.initialize(houses);
+        musicService.netEaseAutoLogin();
         log.info("初始化工作完成");
     }
 

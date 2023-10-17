@@ -27,18 +27,18 @@ public interface MusicService {
 
 
     /**
-     * 切歌
-     *
-     * @return 将要播放的音乐
-     */
-    Music musicSwitch(String houseId);
-
-    /**
      * get pick list
      *
      * @return linked list
      */
     LinkedList<Music> getPickList(String houseId);
+
+    /**
+     * 切歌
+     *
+     * @return 将要播放的音乐
+     */
+    Music musicSwitch(String houseId);
 
     List<Music> getPickListNoPlaying(String houseId);
 
@@ -183,5 +183,8 @@ public interface MusicService {
     void setNetEaseCookie(String cookie);
 
     Long noDefaultPlaylistSize(String houseId);
+
+   void netEaseAutoLogin();
+
 
 }
