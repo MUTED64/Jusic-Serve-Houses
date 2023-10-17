@@ -1263,7 +1263,7 @@ public class MusicServiceImpl implements MusicService {
                     JSONObject jsonObject = JSONObject.parseObject(response.getBody());
 //                    log.info("获取音乐链接结果：{}", jsonObject);
                     if (jsonObject.get("result").equals(100)) {
-                        result = jsonObject.getJSONObject("data").getString(musicId);
+                        result = jsonObject.getJSONObject("data").getString(musicId).replace("http://", "https://");
                         if(result == null || "".equals(result)){
                             QQTrackUrlReq qqTrackUrlReq = new QQTrackUrlReq();
                             try{

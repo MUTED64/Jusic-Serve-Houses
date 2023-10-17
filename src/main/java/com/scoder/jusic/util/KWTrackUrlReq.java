@@ -168,6 +168,7 @@ public class KWTrackUrlReq {
             csrf = kwToken;
         }
         String trackUrl = ReUtil.get("url=(.*?)\r\n", resp.getBody().toString(), 1);
+        trackUrl = trackUrl.replace("http://", "https://").replaceAll("\\.(?=.*sycdn.kuwo.cn)", "-");
         return trackUrl;
     }
 
